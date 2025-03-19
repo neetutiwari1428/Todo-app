@@ -1,0 +1,32 @@
+<h1 style="text-align: center; font-family: Arial, sans-serif; color: #333;">To-Do List</h1>
+
+<div style="width: 50%; margin: 0 auto;">
+  <form action="/tasks" method="post" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+    <input type="text" name="title" placeholder="Task Title" required style="padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+    <input type="datetime-local" name="due_date_time" min="<%= Time.now.strftime('%Y-%m-%dT%H:%M') %>" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+    <select name="priority" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+      <option value="1">Low</option>
+      <option value="2">Medium</option>
+      <option value="3">High</option>
+    </select>
+    <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Add Task</button>
+  </form>
+
+  <form action="/tasks" method="get" style="margin-top: 10px;">
+    <select name="filter" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+      <option value="" disabled selected>Filter by</option>
+      <option value="priority">Priority</option>
+      <option value="due_date">Due Date</option>
+    </select>
+    <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Apply</button>
+  </form>
+</div>
+
+<h2 style="text-align: center; font-family: Arial, sans-serif;">Task Progress: <%= @tasks.any? ? (@tasks.count { |t| t[:completed] } * 100.0 / @tasks.size).round(1) : 0 %>% Completed</h2>
+
+<ul style="list-style: none; padding: 0; width: 70%; margin: 20px auto;">
+  <% @tasks.each do |task| %>
+    <% overdue = task[:due_date_time] && DateTime.parse(task[:due_date_time]) < DateTime.now %>
+    <%= render partial: "task", locals: { task: task, overdue: overdue } %>
+  <% end %>
+</ul>
