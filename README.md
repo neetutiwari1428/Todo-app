@@ -29,7 +29,7 @@ Ensure you have the following installed:
 1. Clone the repository:
    git clone https://github.com/neetutiwari1428/todo-app.git
 
-   cd Todo-app
+   cd todo-app
 
 2. Install dependencies:
    bundle install
